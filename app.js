@@ -1,4 +1,4 @@
-let lang = localStorage.getItem("krishiaiLang") || "en";
+let lang = localStorage.getItem("FarmFusionAILang") || "en";
 let recognition = null;
 
 const $ = s => document.querySelector(s);
@@ -17,7 +17,7 @@ function applyLang() {
             : e.dataset.en;
     });
 
-    localStorage.setItem("krishiaiLang", lang);
+    localStorage.setItem("FarmFusionAILang", lang);
 }
 
 function toggleLang() {
@@ -97,7 +97,7 @@ function refreshMarket() {
 
 async function testServer() {
 
-    console.log("🔎 Testing KrishiAI server...");
+    console.log("🔎 Testing FarmFusionAI server...");
 
     try {
 
@@ -149,7 +149,7 @@ function startVoice() {
             "Voice recognition unavailable";
 
         $("#voiceResult").textContent =
-            "Please open KrishiAI in Google Chrome.";
+            "Please open FarmFusionAI in Google Chrome.";
 
         console.error(
             "❌ SpeechRecognition is not supported in this browser."
@@ -201,7 +201,7 @@ function startVoice() {
             "Thinking...";
 
         $("#voiceResult").textContent =
-            "Sending question to KrishiAI...";
+            "Sending question to FarmFusionAI...";
 
 
         try {
@@ -241,7 +241,7 @@ function startVoice() {
 
 
             $("#voiceStatus").textContent =
-                "KrishiAI Recommendation";
+                "FarmFusionAI Recommendation";
 
 
             $("#voiceResult").innerHTML =
@@ -262,7 +262,7 @@ function startVoice() {
 
 
             $("#voiceResult").textContent =
-                "Could not connect to KrishiAI server.";
+                "Could not connect to FarmFusionAI server.";
 
         }
 
