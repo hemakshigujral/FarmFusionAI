@@ -22,7 +22,7 @@ const ai = new GoogleGenAI({
 });
 
 console.log("====================================");
-console.log("🌱 KRISHIAI SERVER");
+console.log("🌱 FarmFusionAI SERVER");
 console.log("====================================");
 console.log("🤖 Gemini AI initialized");
 console.log("====================================");
@@ -36,14 +36,14 @@ app.get("/test", (req, res) => {
 
     res.json({
         status: "ok",
-        message: "KrishiAI server is working"
+        message: "FarmFusionAI server is working"
     });
 });
 
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
-  console.log("\n🌱 KRISHIAI REQUEST");
+  console.log("\n🌱 FarmFusionAI REQUEST");
   console.log("Question:", message);
 
   if (!message) {
@@ -58,7 +58,7 @@ app.post("/chat", async (req, res) => {
       response = await ai.models.generateContent({
         model: "gemini-3.6-flash",
         contents: `
-    You are KrishiAI, a quick farming assistant for Kerala farmers.
+    You are FarmFusionAI, a quick farming assistant for Kerala farmers.
     
     Answer the farmer's question directly.
     Keep the answer SHORT: maximum 5 bullet points.
@@ -94,7 +94,7 @@ app.post("/chat", async (req, res) => {
 app.listen(PORT, () => {
 
     console.log("====================================");
-    console.log("🌱 KRISHIAI SERVER");
+    console.log("🌱 FarmFusionAI SERVER");
     console.log("====================================");
     console.log("✅ Server running");
     console.log(`🌐 http://localhost:${PORT}`);
