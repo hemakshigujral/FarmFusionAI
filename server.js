@@ -4,6 +4,8 @@ const path = require("path");
 const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
+
+// Render PORT
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -27,10 +29,12 @@ console.log("====================================");
 console.log("🤖 Gemini AI initialized");
 console.log("====================================");
 
+// Home page
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// Test route
 app.get("/test", (req, res) => {
     console.log("✅ TEST REQUEST RECEIVED");
 
@@ -40,64 +44,73 @@ app.get("/test", (req, res) => {
     });
 });
 
+// Gemini chat
 app.post("/chat", async (req, res) => {
-  const { message } = req.body;
 
-  console.log("\n🌱 FarmFusionAI REQUEST");
-  console.log("Question:", message);
+    const { message } = req.body;
 
-  if (!message) {
-      return res.status(400).json({
-          reply: "Please ask a question."
-      });
-  }
+    console.log("\n🌱 FarmFusionAI REQUEST");
+    console.log("Question:", message);
 
-  try {
-      console.time("Gemini response");
+    if (!message) {
+        return res.status(400).json({
+            reply: "Please ask a question."
+        });
+    }
 
-      response = await ai.models.generateContent({
-        model: "gemini-3.6-flash",
-        contents: `
-    You are FarmFusionAI, a quick farming assistant for Kerala farmers.
-    
-    Answer the farmer's question directly.
-    Keep the answer SHORT: maximum 5 bullet points.
-    Use simple English.
-    Give practical actions the farmer can do today.
-    Do not write long explanations.
-    Do not repeat the question.
-    Do not use markdown headings.
-    
-    Farmer's question:
-    ${message}
-    `
-    });
+    try {
 
-      console.timeEnd("Gemini response");
+        console.time("Gemini response");
 
-      const reply = response.text || "No response received.";
+        const response = await ai.models.generateContent({
+            model: "gemini-3.7-flash",
+            contents: `
+You are FarmFusionAI, a quick farming assistant for Kerala farmers.
 
-      console.log("✅ ANSWER RECEIVED");
-      console.log("AI:", reply);
+Answer the farmer's question directly.
 
-      return res.json({ reply });
+Keep the answer SHORT:
+- Maximum 5 bullet points
+- Use simple English
+- Give practical actions the farmer can do today
+- Do not write long explanations
+- Do not repeat the question
+- Do not use markdown headings
 
-  } catch (error) {
-      console.error("❌ GEMINI ERROR:", error.message);
+Farmer's question:
+${message}
+`
+        });
 
-      return res.status(500).json({
-          reply: "Gemini is temporarily busy. Please try again."
-      });
-  }
+        console.timeEnd("Gemini response");
+
+        const reply = response.text || "No response received.";
+
+        console.log("✅ ANSWER RECEIVED");
+        console.log("AI:", reply);
+
+        return res.json({
+            reply: reply
+        });
+
+    } catch (error) {
+
+        console.error("❌ GEMINI ERROR:", error);
+
+        return res.status(500).json({
+            reply: "Gemini is temporarily busy. Please try again."
+        });
+    }
 });
 
-app.listen(PORT, () => {
+// IMPORTANT FOR RENDER
+app.listen(PORT, "0.0.0.0", () => {
 
     console.log("====================================");
     console.log("🌱 FarmFusionAI SERVER");
     console.log("====================================");
     console.log("✅ Server running");
-    console.log(`🌐 http://localhost:${PORT}`);
+    console.log(`🌐 Port: ${PORT}`);
     console.log("🤖 Gemini AI ready");
     console.log("====================================");
 
