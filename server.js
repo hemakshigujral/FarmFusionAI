@@ -51,7 +51,7 @@ app.get("/test", (req, res) => {
 // Chat endpoint
 app.post("/chat", async (req, res) => {
 
-    const { message } = req.body;
+    const { message, language } = req.body;
 
     console.log("\n🌱 FarmFusionAI REQUEST");
     console.log("Question:", message);
@@ -68,15 +68,19 @@ app.post("/chat", async (req, res) => {
 
         const response = await ai.models.generateContent({
             model: "gemini-3.6-flash",
-            contents: `
+           contents: `
 You are FarmFusionAI, a quick farming assistant for Kerala farmers.
 
 Answer the farmer's question directly.
 
+Language instruction:
+${language === "ml"
+    ? "Reply ONLY in Malayalam. Do not reply in English. Use simple, natural Malayalam that Kerala farmers can easily understand."
+    : "Reply in simple English."}
+
 Rules:
 - Keep the answer SHORT.
 - Maximum 5 bullet points.
-- Use simple English.
 - Give practical actions the farmer can do today.
 - Do not write long explanations.
 - Do not repeat the question.
@@ -85,6 +89,7 @@ Rules:
 Farmer's question:
 ${message}
 `
+
         });
 
         console.timeEnd("Gemini response");
