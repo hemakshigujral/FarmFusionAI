@@ -309,31 +309,60 @@ function startVoice() {
 // =====================================================
 function speakAnswer(text) {
 
-  if (!("speechSynthesis" in window)) {
-      console.log("❌ Voice output not supported");
-      return;
-  }
+    if (!("speechSynthesis" in window)) {
+        console.log("❌ Voice output not supported");
+        return;
+    }
 
-  // Purani speech stop karo
-  window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel();
 
-  // Markdown hatao
-  const cleanText = text
-      .replace(/\*\*/g, "")
-      .replace(/###/g, "")
-      .replace(/##/g, "")
-      .replace(/\*/g, "")
-      .replace(/•/g, "")
-      .replace(/\n/g, ". ");
+    const cleanText = text
+        .replace(/\*\*/g, "")
+        .replace(/###/g, "")
+        .replace(/##/g, "")
+        .replace(/\*/g, "")
+        .replace(/•/g, " ")
+        .replace(/\n/g, ". ");
 
-  const speech = new SpeechSynthesisUtterance(cleanText);
+    const speech = new SpeechSynthesisUtterance(cleanText);
 
-  speech.lang = lang === "ml" ? "ml-IN" : "en-IN";
-  speech.rate = 0.95;
-  speech.pitch = 1;
-  speech.volume = 1;
+    if (lang === "ml") {
 
-  window.speechSynthesis.speak(speech);
+        speech.lang = "ml-IN";
+
+        const voices = window.speechSynthesis.getVoices();
+
+        const malayalamVoice = voices.find(v =>
+            v.lang.toLowerCase().startsWith("ml")
+        );
+
+        if (malayalamVoice) {
+            speech.voice = malayalamVoice;
+            console.log("🇮🇳 Malayalam voice selected:", malayalamVoice.name);
+        } else {
+            console.log("⚠️ Malayalam voice not available in this browser");
+        }
+
+    } else {
+
+        speech.lang = "en-IN";
+
+        const voices = window.speechSynthesis.getVoices();
+
+        const indianEnglishVoice = voices.find(v =>
+            v.lang.toLowerCase() === "en-in"
+        );
+
+        if (indianEnglishVoice) {
+            speech.voice = indianEnglishVoice;
+        }
+    }
+
+    speech.rate = 0.95;
+    speech.pitch = 1;
+    speech.volume = 1;
+
+    window.speechSynthesis.speak(speech);
 }
 
 function formatAIResponse(text) {
