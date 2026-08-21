@@ -217,9 +217,10 @@ function startVoice() {
                     "Content-Type": "application/json"
                 },
 
-                body: JSON.stringify({
-                    message: q
-                })
+               body: JSON.stringify({
+    message: q,
+    language: lang
+})
 
             });
 
